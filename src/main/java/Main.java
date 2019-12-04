@@ -1,8 +1,5 @@
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.IOException;
@@ -27,11 +24,13 @@ public class Main {
         int amount = 100;
 
 //for (int i = firstIteration; i>=lastIteration; i++) {
-        email = 18+"trickster"+18+postfix;
+        email = 30+"trickster"+30+postfix;
 //}
         System.setProperty("webdriver.chrome.driver", "C:\\yandexdriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        // JavascriptExecutor js = (JavascriptExecutor) driver;
+
         driver.manage().window().maximize();
         // driver.get(firstPage);
 
@@ -68,14 +67,12 @@ public class Main {
         System.out.println("1st iteration: "+money);
         //    driver.get(cabinet);
 
-        while ((Integer.parseInt(StringUtils.chop(money)) != amount))
-         {
-             driver.navigate().refresh();
-            money = StringUtils.chop(driver.findElement(By.xpath("//span[@class='money']")).getText());
-            System.out.println(money);
-            System.out.println((Integer.parseInt(StringUtils.chop(money)) == amount));
-            System.out.println("money ="+ money + ", waiting for :" +amount+", refreshing...");
+        while (Integer.parseInt((money)) != amount)
+        {
+            driver.navigate().refresh();
             Thread.sleep(5000);
+            money = StringUtils.chop(driver.findElement(By.xpath("//span[@class='money']")).getText());
+            System.out.println("money ="+ money + ", waiting for :" +amount+", refreshing...");
         }
 
 
@@ -90,10 +87,19 @@ public class Main {
         Thread.sleep(5000);
         driver.findElement(By.xpath("//div[@id='product-hint_80']")).click();
         driver.findElement(By.xpath("//button[@class='buy-btn'][@data-store_item_id=80]")).click();
-        driver.findElement(By.xpath("//button[@class=class='open-btn']")).click();
-        driver.get(shop);
-        driver.findElement(By.xpath("//a[@class='open-btn']")).click();
+        driver.findElement(By.xpath("//button[@class='open-btn']")).click();
         Thread.sleep(5000);
+        driver.get(shop);
+
+        Thread.sleep(5000);
+        WebElement element = driver.findElement(By.xpath("//a[@data-item_id=36298]"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        Thread.sleep(500);
+        element.click();
+        Thread.sleep(12000);
+        String image = driver.findElement(By.xpath("//div[@class='shop__card-drop']/img")).getAttribute("src");
+        System.out.println(image);
+        // Thread.sleep(5000);
 
 
 
